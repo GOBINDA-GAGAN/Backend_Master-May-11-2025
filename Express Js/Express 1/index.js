@@ -13,8 +13,13 @@ app.get("/", (req, res) => {
   res.send(`<h1> Hello Backend</h1>`);
 });
 
-// Industry Stander
+// Industry Stander 
+
 app.get("/api/v1/users", (req, res) => {
+
+  console.log(req.query);  // query parameter
+
+  
   res.status(200).send(User);
 });
 
