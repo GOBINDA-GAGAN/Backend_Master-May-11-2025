@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 
 // Industry Stander
 
+//Query
 app.get("/api/v1/users", (req, res) => {
   const { name } = req.query;
   console.log("Query Params:", name);
@@ -27,6 +28,21 @@ app.get("/api/v1/users", (req, res) => {
     if (user.length === 0) {
       return res.status(404).send("User not found");
     }
+  }
+
+  return res.status(200).send(User);
+});
+
+// Params
+app.get("/api/v1/users/:id", (req, res) => {
+  const { id } = req.params;
+  console.log("id:", id);
+
+  const userId = parseInt(id);
+  if (userId) {
+    const user = User.find((user) => user.id === userId);
+
+    return res.status(200).send(user);
   }
 
   return res.status(200).send(User);
