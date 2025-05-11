@@ -13,16 +13,24 @@ app.get("/", (req, res) => {
   res.send(`<h1> Hello Backend</h1>`);
 });
 
-// Industry Stander 
+// Industry Stander
 
 app.get("/api/v1/users", (req, res) => {
+  const { name } = req.query;
+  console.log("Query Params:", name);
+  if (name) {
+    const user = User.filter(
+      (user) =>
+        user.name.replace(/\s/g, "").toLowerCase() === name.toLowerCase()
+    );
 
-  console.log(req.query);  // query parameter
+    if (user.length === 0) {
+      return res.status(404).send("User not found");
+    }
+  }
 
-  
-  res.status(200).send(User);
+  return res.status(200).send(User);
 });
-
 
 app.listen(Port, () => {
   console.log("server Start");
