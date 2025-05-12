@@ -84,6 +84,10 @@ app.put("/api/v1/users/:id", (req, res) => {
     id: userId,
     ...body,
   };
+  //   User[userIndex] = {
+  //   ...User[userIndex],
+  //   ...body,
+  // };
   res.status(201).send({
     message: "user update successfully",
     user: User[userIndex],
@@ -91,6 +95,28 @@ app.put("/api/v1/users/:id", (req, res) => {
 });
 
 // PATCH ->One field Update
+app.patch("/api/v1/users/:id", (req, res) => {
+  console.log(req.body, req.params);
+  const {
+    body,
+    params: { id },
+  } = req;
+
+  const userId = parseInt(id);
+  const userIndex = User.findIndex((user) => user.id === userId);
+  if (userIndex === -1) {
+    res.status(400).send("user not found");
+  }
+
+  User[userIndex] = {
+    ...User[userIndex],
+    ...body,
+  };
+  res.status(201).send({
+    message: "user update successfully",
+    user: User[userIndex],
+  });
+});
 
 app.listen(Port, () => {
   console.log("server Start");
