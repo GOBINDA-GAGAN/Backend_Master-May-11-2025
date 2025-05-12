@@ -3,6 +3,8 @@ import express from "express";
 import { User } from "./Data/User.js";
 const app = express();
 
+app.use(express.json());
+
 const Port = 5000;
 
 // GET Fetch data from the server
@@ -47,6 +49,48 @@ app.get("/api/v1/users/:id", (req, res) => {
 
   return res.status(200).send(User);
 });
+
+// POST request
+
+app.post("/api/v1/users", (req, res) => {
+  const { name, email } = req.body;
+  const newUser = {
+    id: User.length + 1,
+    name: name,
+    email: email,
+  };
+  User.push(newUser);
+
+  res.status(201).send({
+    message: "user created successfully",
+    user: newUser,
+  });
+});
+// PUT -> All filled Update
+app.put("/api/v1/users/:id", (req, res) => {
+  console.log(req.body, req.params);
+  const {
+    body,
+    params: { id },
+  } = req;
+
+  const userId = parseInt(id);
+  const userIndex = User.findIndex((user) => user.id === userId);
+  if (userIndex === -1) {
+    res.status(400).send("user not found");
+  }
+
+  User[userIndex] = {
+    id: userId,
+    ...body,
+  };
+  res.status(201).send({
+    message: "user update successfully",
+    user: User[userIndex],
+  });
+});
+
+// PATCH ->One field Update
 
 app.listen(Port, () => {
   console.log("server Start");
