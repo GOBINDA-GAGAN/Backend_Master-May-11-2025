@@ -1,9 +1,10 @@
 import express from "express";
+import { generatedToken } from "../utils/token.js";
 const router = express.Router();
 
 
 router.get("/generate-token", (req, res) => {
-  const Access_token = 12345678;
+  const Access_token = generatedToken();
   res.status(201).send({
     message: "token generated, please save it for feature use",
     token: Access_token,
