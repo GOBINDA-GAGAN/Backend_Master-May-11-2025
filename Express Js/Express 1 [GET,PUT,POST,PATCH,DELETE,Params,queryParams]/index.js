@@ -41,13 +41,18 @@ app.get("/api/v1/users/:id", (req, res) => {
   console.log("id:", id);
 
   const userId = parseInt(id);
-  if (userId) {
-    const user = User.find((user) => user.id === userId);
 
-    return res.status(200).send(user);
+  if (!userId) {
+    return res.status(400).send("Invalid user ID");
   }
 
-  return res.status(200).send(User);
+  const user = User.find((user) => user.id === userId);
+
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+  return res.status(200).send(user);
 });
 
 // POST request
@@ -116,6 +121,26 @@ app.patch("/api/v1/users/:id", (req, res) => {
     message: "user update successfully",
     user: User[userIndex],
   });
+});
+// DELETE -> DELETE  the user
+app.delete("/api/v1/users/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const parseId= parseInt(id)
+    console.log(id);
+    
+
+    const userIndex = User.findIndex((user) => user.id ===  parseId);
+    if (userIndex === -1) {
+      return res.status(404).send("User not found");
+    }
+
+    User.splice(userIndex, 1);
+    return res.status(200).send("User deleted successfully");
+  } catch (error) {
+    console.log(error.message); // fixed typo
+    return res.status(500).send("Internal server error");
+  }
 });
 
 app.listen(Port, () => {
